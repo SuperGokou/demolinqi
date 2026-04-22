@@ -11,7 +11,8 @@
   const input    = form.querySelector('input[name=q]');
   const sendBtn  = form.querySelector('.chat-send');
 
-  const API = '/api/chat';
+  const API_BASE = (window.AOI_CONFIG && window.AOI_CONFIG.API_BASE) || '';
+  const API = `${API_BASE}/api/chat`;
 
   // --- Open / close ---
   function open() {

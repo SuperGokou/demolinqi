@@ -87,9 +87,25 @@ The DeepSeek API key lives only in `.env`, read by `server.js` at startup. The f
 
 Works similarly — `api/*.js` is auto-detected as Netlify Functions. Set `DEEPSEEK_API_KEY` in Site Settings → Environment variables.
 
-### Static-only hosts (GitHub Pages, Cloudflare Pages without Functions)
+### GitHub Pages (site) + Vercel (API) — hybrid
 
-⚠️ Chat will **not** work on static-only hosts because the `/api/chat` endpoint requires a server. Use Vercel / Netlify / Render instead.
+GitHub Pages only serves static files, so the chat API must live elsewhere. Set it up once:
+
+1. **Deploy the API to Vercel**:
+   - Import this repo on [vercel.com](https://vercel.com/new)
+   - Settings → Environment Variables → add `DEEPSEEK_API_KEY`
+   - Deploy. You'll get a URL like `https://aoi-xxx.vercel.app`
+   - Verify: visit `https://aoi-xxx.vercel.app/api/health` → should say `"key_configured": true`
+2. **Point the client at that API**: edit `js/config.js` in this repo:
+   ```js
+   window.AOI_CONFIG = {
+     API_BASE: 'https://aoi-xxx.vercel.app',  // ← your Vercel URL
+   };
+   ```
+3. **Commit & push** — GitHub Pages re-deploys automatically.
+4. **Enable Pages** in repo Settings → Pages → Source: `main` branch, `/` root.
+
+CORS is already enabled on the API so the cross-origin call works.
 
 ### Self-hosted Node (Render / Railway / Fly.io / VPS)
 
