@@ -69,11 +69,28 @@ The DeepSeek API key lives only in `.env`, read by `server.js` at startup. The f
   ```
   should return no matches in HTML/CSS/JS.
 
-## Deployment notes
+## Deployment
 
-- Static files can be served from any static host (Nginx, Vercel, Netlify, GitHub Pages)
-- `server.js` can be deployed as:
-  - A long-running Node process behind a reverse proxy
-  - Ported to Vercel / Cloudflare Workers as a serverless function (adapt SSE response)
-  - Ported to a Supabase Edge Function (compatible Deno runtime)
-- Always set `DEEPSEEK_API_KEY` in the production environment's secret store, never in source.
+### Vercel (recommended)
+
+1. Import this repo on [vercel.com](https://vercel.com/new).
+2. Leave framework preset as "Other" — Vercel will detect the static files and the `api/` directory automatically.
+3. In **Project → Settings → Environment Variables**, add:
+   - `DEEPSEEK_API_KEY` = your DeepSeek key (server-side only)
+   - `DEEPSEEK_MODEL` = `deepseek-chat` *(optional, defaults to this)*
+4. Click **Deploy**. Chat will work at `https://<your-project>.vercel.app/`.
+
+> **Note.** GitHub repository "secrets" or "environment variables" are only for GitHub Actions workflows.
+> They do **not** reach Vercel or any other host. Env vars must be set in the host's own dashboard.
+
+### Netlify
+
+Works similarly — `api/*.js` is auto-detected as Netlify Functions. Set `DEEPSEEK_API_KEY` in Site Settings → Environment variables.
+
+### Static-only hosts (GitHub Pages, Cloudflare Pages without Functions)
+
+⚠️ Chat will **not** work on static-only hosts because the `/api/chat` endpoint requires a server. Use Vercel / Netlify / Render instead.
+
+### Self-hosted Node (Render / Railway / Fly.io / VPS)
+
+`server.js` runs the same proxy as a long-lived Express process. Set `DEEPSEEK_API_KEY` in the host's env panel, deploy, expose port 3100.

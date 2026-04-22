@@ -1056,9 +1056,9 @@ main, nav, footer, .tick { position: relative; z-index: 2; }
 .corr-title {
   font-family: var(--sans-cjk), var(--sans);
   font-weight: 900;
-  font-size: clamp(48px, 7vw, 124px);
-  line-height: 1.02;
-  letter-spacing: -0.04em;
+  font-size: clamp(44px, 6vw, 104px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   color: var(--ink);
   margin-bottom: 30px;
 }
